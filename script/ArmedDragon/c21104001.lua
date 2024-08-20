@@ -24,7 +24,6 @@ function s.initial_effect(c)
 	e4:SetCategory(CATEGORY_DESTROY+CATEGORY_SPECIAL_SUMMON)
 	e4:SetType(EFFECT_TYPE_IGNITION)
 	e4:SetRange(LOCATION_MZONE)
-	e4:SetCountLimit(1,id)
 	e4:SetCost(s.spcost)
 	e4:SetTarget(s.sptg)
 	e4:SetOperation(s.spop)
@@ -35,7 +34,6 @@ function s.initial_effect(c)
 	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e5:SetProperty(EFFECT_FLAG_DELAY)
 	e5:SetCode(EVENT_TO_GRAVE)
-	e5:SetCountLimit(1,{id,1})
 	e5:SetCondition(s.tgcon)
 	e5:SetTarget(s.tgtg)
 	e5:SetOperation(s.tgop)
@@ -62,6 +60,9 @@ function s.actop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
+function s.spcostfilter(c,e,tp)
+	return c:IsMonster() and c:IsAbleToGraveAsCost() and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND|LOCATION_DECK,0,1,c,e,tp)
+end
 function s.spfilter(c,e,tp)
 	return c:IsSetCard(SET_ARMED_DRAGON) and c:IsLevelBelow(5) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
