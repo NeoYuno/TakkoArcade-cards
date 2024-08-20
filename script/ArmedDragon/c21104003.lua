@@ -2,6 +2,13 @@
 Duel.LoadCardScript("c73879377.lua")
 local s,id=GetID()
 function s.initial_effect(c)
+    --add code
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetCode(EFFECT_ADD_CODE)
+	e0:SetValue(91998119)
+	c:RegisterEffect(e0)
 	--This card's name becomes "Armed Dragon LV7" while on the field or in the GY
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -98,9 +105,9 @@ function s.spfilter(c,e,tp)
 	return c:IsSetCard(SET_ARMED_DRAGON) and c:IsLevelBelow(10) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.spcostfilter,tp,LOCATION_HAND,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.spcostfilter,tp,LOCATION_HAND,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,s.spcostfilter,tp,LOCATION_HAND,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.spcostfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -150,7 +157,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
             e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
             e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
             e1:SetValue(LOCATION_DECKSHF)
-            tc:RegisterEffect(e1)
+            e:GetHandler():RegisterEffect(e1)
         end
         Duel.SpecialSummonComplete()
 	end
